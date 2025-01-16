@@ -6,11 +6,12 @@ import { apiClient } from '@/lib/api-client';
 import { USER_ROUTES } from '@/utils/constants';
 import SingleNotification from './SingleNotification';
 import { log } from 'console';
+import { RootState } from '@/state/store';
 
 
 function Notifications() {
-    const currUser = useSelector((state) => state.auth.user)
-    const currToken = useSelector((state) => state.auth.token)
+    const currUser = useSelector((state: RootState) => state.auth.user)
+    const currToken = useSelector((state: RootState) => state.auth.token)
 
     const [visibleNotifs, setVisibleNotifs] = useState<NotificationType[]>([])
     const [loadingNotifs, setLoadingNotifs] = useState(false);

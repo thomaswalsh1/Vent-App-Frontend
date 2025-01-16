@@ -12,13 +12,14 @@ import Post from '../Post';
 import { useSelector } from 'react-redux';
 import { PostType } from '@/lib/PostType';
 import { GrDocumentMissing } from "react-icons/gr";
-import { AxiosError } from 'axios';
+import axios, { AxiosError } from 'axios';
+import { RootState } from '@/state/store';
 
 function PostCarousel({ userId }: { userId: string }) {
     const [visiblePosts, setVisiblePosts] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
 
-    const currToken = useSelector((state) => state.auth.token);
+    const currToken = useSelector((state: RootState) => state.auth.token);
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -40,7 +41,7 @@ function PostCarousel({ userId }: { userId: string }) {
                         })
                         return res.data
                     } catch (error: unknown) {
-                        if (error.response && error.response.status === 401) {
+                        if (axios.isAxiosError(error) && error.response?.status === 401) {
                             console.log(`Skipping post ${postId} due to 401 error`);
                             return null;
                         }

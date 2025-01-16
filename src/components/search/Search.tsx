@@ -5,10 +5,11 @@ import { SEARCH_POST_ROUTE, SEARCH_USER_ROUTE } from '@/utils/constants';
 import PostData from '../Post';
 import { useSelector } from 'react-redux';
 import { Skeleton } from '../ui/skeleton';
-import UserSearchCarousel from './UserSearchCarousel';
 import { Button } from '../ui/button';
 import UserCard from './UserCard';
 import { useLocation } from 'react-router-dom';
+import { RootState } from '@/state/store';
+import Post from '@/components/Post';
 
 interface PostData {
     title: string;
@@ -17,6 +18,8 @@ interface PostData {
     userId: string;
     _id?: string;
     imageUrl?: string;
+    visibility: string;
+    tags: string[]
 }
 
 interface UserCardProps {
@@ -25,10 +28,13 @@ interface UserCardProps {
     firstName: string;
     lastName: string;
     pfp: string;
+    posts: []; 
+    num_followers: number;
+    num_following: number;
 }
 
 function Search() {
-    const myToken = useSelector((state: any) => state.auth.token);
+    const myToken = useSelector((state: RootState) => state.auth.token);
 
     // check if query is available in url
     const location = useLocation();
@@ -239,7 +245,7 @@ function Search() {
                                     key={index}
                                     className="flex text-xs sm:text-md md:text-lg rounded-2xl m-3 mb-8 mt-8 flex-row items-start border-2 max-h-[40rem] overflow-hidden"
                                 >
-                                    <PostData data={data} />
+                                    <Post data={data} />
                                 </div>
                             ))}
                             {(isLoading || isFetchingMore) &&

@@ -26,6 +26,7 @@ import { SIGNUP_ROUTE, SIGNIN_ROUTE, APP_STORE_ROUTE } from '@/utils/constants'
 import { useNavigate } from 'react-router-dom';
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
+import { RootState } from '@/state/store'
 
 
 const signUpSchema = z.object({
@@ -53,7 +54,7 @@ export default function NewSign() {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
     const [signInMode, setSignInMode] = useState(false);
-    const currUser = useSelector((state) => state.auth.user || { username: 'Guest' });
+    const currUser = useSelector((state: RootState) => state.auth.user || { username: 'Guest' });
     const [currentForm, setCurrentForm] = useState(0);
     const [direction, setDirection] = useState(0);
     const myForms = ["Email", "Name", "Password"];
@@ -168,14 +169,14 @@ export default function NewSign() {
 
     const handleGoForward = async () => {
         if (currentForm < myForms.length - 1) { // handle validation of input page
-            const fieldMap = {
+            const fieldMap: Record<number, (keyof z.infer<typeof signUpSchema>)[]> = {
                 0: ["email"],
                 1: ["firstName", "lastName", "username"],
                 2: ["password", "confirm"]
             }
 
             //
-            const currentFields = fieldMap[currentForm as keyof typeof fieldMap]
+            const currentFields = fieldMap[currentForm];
             const stepValid = await trigger(currentFields)
 
             if (stepValid && currentForm < myForms.length - 1) {

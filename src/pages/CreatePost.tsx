@@ -1,5 +1,4 @@
 import React from 'react';
-import { MySideBar } from '@/components/sidebar/MySideBar';
 import NewPost from '@/components/NewPost';
 
 function CreatePost() {

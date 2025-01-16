@@ -20,6 +20,7 @@ import { CurrentUser } from '@/lib/CurrentUser';
 import { useToast } from '@/hooks/use-toast';
 import ReportWindow from '../ReportWindow/ReportWindow';
 import { CiLock } from "react-icons/ci";
+import { RootState } from '@/state/store';
 
 interface Profile {
     username: string;
@@ -55,8 +56,8 @@ function ProfileView() {
     const [settings, openSettings] = useState(false);
     const [showReportMenu, setShowReportMenu] = useState(false);
 
-    const currUser: CurrentUser = useSelector((state) => state.auth.user || { username: 'Guest' });
-    const currToken = useSelector((state) => state.auth.token);
+    const currUser: CurrentUser = useSelector((state: RootState) => state.auth.user);
+    const currToken = useSelector((state: RootState) => state.auth.token);
 
     const navigate = useNavigate();
 
@@ -176,10 +177,6 @@ function ProfileView() {
             </div>
         );
     }
-
-    const SettingsLogo = () => {
-        return <img className="h-full w-full" src={SettingsIcon} alt="Settings Icon" />;
-    };
 
     return (
         <div className="bg-gray-100 w-full sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">

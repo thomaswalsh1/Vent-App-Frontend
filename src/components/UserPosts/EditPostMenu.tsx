@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from '@/components/ui/textarea'
 import { useNavigate } from 'react-router-dom'
 import { POST_ROUTES } from '@/utils/constants'
+import { RootState } from '@/state/store';
 
 interface EditPostWindowProps {
     id: string;
@@ -50,8 +51,8 @@ const VISIBILITY_TYPES_NAMED = [
 ]
 
 function EditPostMenu({ handleShow, id, defaultVisibility }: EditPostWindowProps) {
-    const currUser = useSelector((state) => state.auth.user)
-    const currToken = useSelector((state) => state.auth.token)
+    const currUser = useSelector((state: RootState) => state.auth.user)
+    const currToken = useSelector((state: RootState) => state.auth.token)
     const navigate = useNavigate();
 
     const form = useForm<EditPostFormValues>({

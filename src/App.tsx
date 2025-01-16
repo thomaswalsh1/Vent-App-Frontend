@@ -12,10 +12,11 @@ import ViewUserProfile from './pages/ViewUserProfile';
 import Layout from '@/components/Layout';
 import ViewNotifications from './pages/ViewNotifications';
 import NewSign from './pages/NewSign';
+import { RootState } from '@/state/store';
 
 
 function App() {
-  const isAuth = Boolean(useSelector((state) => state.auth.token));
+  const isAuth = Boolean(useSelector((state: RootState) => state.auth.token));
 
   return (
     <BrowserRouter>

@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import emptyPfp from "../assets/emptypfp.png";
+import emptyPfp from "@/assets/emptypfp.png";
 import { apiClient } from '@/lib/api-client';
 import { USER_ROUTES } from '@/utils/constants';
 import { setSignin } from '@/state/auth/authSlice';
@@ -21,11 +21,12 @@ import {
 } from "@/components/ui/hover-card"
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { MdVisibility } from 'react-icons/md';
+import { RootState } from '@/state/store';
 
 
 function ProfileEditor() {
-    const currUser = useSelector((state) => state.auth.user);
-    const currToken = useSelector((state) => state.auth.token);
+    const currUser = useSelector((state: RootState) => state.auth.user);
+    const currToken = useSelector((state: RootState) => state.auth.token);
 
     const dispatch = useDispatch();
     const { toast } = useToast();

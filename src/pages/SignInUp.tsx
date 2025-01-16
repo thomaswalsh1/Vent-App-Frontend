@@ -9,7 +9,6 @@ import { useForm } from "react-hook-form"
 import { useToast } from "@/hooks/use-toast"
 import { useDispatch, useSelector } from "react-redux";
 import { setSignin } from '@/state/auth/authSlice'
-import journalertext from '../assets/journalertext.png';
 
 import {
   Tabs,
@@ -20,6 +19,7 @@ import {
 import { apiClient } from '@/lib/api-client'
 import { SIGNUP_ROUTE, SIGNIN_ROUTE } from '@/utils/constants'
 import { useNavigate } from 'react-router-dom';
+import { RootState } from '@/state/store'
 
 
 const signUpSchema = z.object({
@@ -157,7 +157,7 @@ export default function SignInUp() {
     }
   }
 
-  const currUser = useSelector((state) => state.auth.user || { username: 'Guest' });
+  const currUser = useSelector((state: RootState) => state.auth.user || { username: 'Guest' });
   console.log(currUser);
 
   

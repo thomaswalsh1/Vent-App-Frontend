@@ -10,7 +10,7 @@ import { useToast } from "@/hooks/use-toast"
 import { apiClient } from '@/lib/api-client';
 import { NEW_POST_ROUTE, POST_ROUTES, USER_ROUTES } from '@/utils/constants';
 import { useSelector } from 'react-redux';
-import store from '@/state/store';
+import store, { RootState } from '@/state/store';
 import { ContentMatch } from '@tiptap/pm/model';
 import { motion, AnimatePresence } from 'framer-motion';
 import TipTapViewOnly from './tiptap/TipTapViewOnly';
@@ -22,7 +22,6 @@ import {
     SelectValue,
 } from "@/components/ui/select"
 import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
-import TagBox from './TagBox/TagBox';
 import TagInput from './InputtingTags/TagInput';
 import { Separator } from "@/components/ui/separator"
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
@@ -31,8 +30,8 @@ import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
 function TextEditor() {
     const { toast } = useToast()
 
-    const currUser = useSelector((state) => state.auth.user || { username: 'Guest' });
-    const currToken = useSelector((state) => state.auth.token)
+    const currUser = useSelector((state: RootState) => state.auth.user);
+    const currToken = useSelector((state: RootState) => state.auth.token)
     const [isPrivate, setIsPrivate] = useState(false);
     const [onFinalize, setOnFinalize] = useState(false);
     const [heldContent, setHeldContent] = useState("");

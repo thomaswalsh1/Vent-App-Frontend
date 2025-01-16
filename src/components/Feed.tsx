@@ -4,19 +4,22 @@ import { apiClient } from '@/lib/api-client';
 import { POST_ROUTES } from '@/utils/constants';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 interface PostData {
   title: string;
   content: string;
   author: string;
   userId: string;
-  _id?: string;
+  _id: string;
   imageUrl?: string;
+  visibility: string;
+  tags: string[]
 }
 
 export default function Feed() {
-  const currUser = useSelector((state) => state.auth.user);
-  const myToken = useSelector((state) => state.auth.token);
+  const currUser = useSelector((state: RootState) => state.auth.user);
+  const myToken = useSelector((state: RootState) => state.auth.token);
   
   const [visiblePosts, setVisiblePosts] = useState<PostData[]>([]);
   const [loading, setLoading] = useState(true);

@@ -1,5 +1,3 @@
-import React from 'react';
-import { MySideBar } from '@/components/sidebar/MySideBar';
 import ViewPost from '@/components/UserPosts/ViewPost';
 
 function SeePost() {

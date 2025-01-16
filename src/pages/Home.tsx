@@ -1,7 +1,5 @@
 import React from 'react';
-import { MySideBar } from '@/components/sidebar/MySideBar';
 import Feed from '@/components/Feed';
-import { useSelector } from "react-redux";
 
 
 function Home() {

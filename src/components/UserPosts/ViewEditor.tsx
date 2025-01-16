@@ -10,7 +10,6 @@ import {
 } from "@/components/ui/form"
 import * as z from 'zod';
 import { Button } from '../ui/button';
-import { Input } from './ui/input';
 import { zodResolver } from '@hookform/resolvers/zod';
 import TipTapViewOnly from '../tiptap/TipTapViewOnly';
 import { Navigate, useNavigate, useParams } from 'react-router-dom';
@@ -31,6 +30,7 @@ import { Modal } from "flowbite-react";
 import ReportWindow from '@/components/ReportWindow/ReportWindow';
 import { CgUnavailable } from "react-icons/cg";
 import EditPostMenu from './EditPostMenu';
+import { RootState } from '@/state/store';
 
 function ViewEditor() {
     const params = useParams();
@@ -51,8 +51,8 @@ function ViewEditor() {
 
     const { toast } = useToast();
 
-    const currUser = useSelector((state) => state.auth.user)
-    const currToken = useSelector((state) => state.auth.token);
+    const currUser = useSelector((state: RootState) => state.auth.user)
+    const currToken = useSelector((state: RootState) => state.auth.token);
 
     useEffect(() => {
         const getPostDB = async () => {

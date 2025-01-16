@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { NotificationType } from '@/lib/NotificationType'
 import { apiClient } from '@/lib/api-client';
 import { USER_ROUTES } from '@/utils/constants';
-import emptyPfp from '../../assets/emptypfp.png';
+import emptyPfp from '@/assets/emptypfp.png';
 import { useNavigate } from 'react-router-dom';
 import { scrapeTime } from '@/lib/scrapeTime';
 import { useSelector } from 'react-redux';
@@ -10,6 +10,7 @@ import { Button } from '@/components/ui/button';
 import { TiDelete } from "react-icons/ti";
 import { Description } from '@radix-ui/react-toast';
 import { toast } from '@/hooks/use-toast';
+import { RootState } from '@/state/store';
 
 interface NotifProps {
     data: NotificationType;
@@ -29,7 +30,7 @@ function SingleNotification({ data }: NotifProps) {
     const navigate = useNavigate();
     const notificationRef = useRef<HTMLDivElement>(null);
 
-    const currToken = useSelector((state) => state.auth.token);
+    const currToken = useSelector((state: RootState) => state.auth.token);
 
     const [loadedData, setLoadedData] = useState<NotificationVisual>({
         username: "",

@@ -10,10 +10,11 @@ import {
 } from "@/components/ui/carousel"
 import Post from '../Post';
 import { useSelector } from 'react-redux';
+import { RootState } from '@/state/store';
 
 function DraftCarousel({ userId }: { userId: string }) {
     const [visibleDrafts, setVisibleDrafts] = useState([]);
-    const currToken = useSelector((state) => state.auth.token)
+    const currToken = useSelector((state: RootState) => state.auth.token)
 
     useEffect(() => {
         const fetchUserData = async () => {

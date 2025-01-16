@@ -1,7 +1,6 @@
 import React from 'react'
 import Notifications from '@/components/Notifications/Notifications'
 
-
 function ViewNotifications() {
   return (
     <div className="flex-grow flex flex-col items-center">

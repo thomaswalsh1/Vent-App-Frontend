@@ -13,6 +13,7 @@ import { useSelector } from 'react-redux'
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '../ui/select'
 import { Textarea } from '@/components/ui/textarea'
 import { useNavigate } from 'react-router-dom'
+import { RootState } from '@/state/store'
 
 interface ReportWindowProps {
     targetType: "Post" | "User",
@@ -43,8 +44,8 @@ const REPORT_TYPES = [
 ] as const;
 
 function ReportWindow({ targetType, id, handleShow }: ReportWindowProps) {
-    const currUser = useSelector((state) => state.auth.user)
-    const currToken = useSelector((state) => state.auth.token)
+    const currUser = useSelector((state: RootState) => state.auth.user)
+    const currToken = useSelector((state: RootState) => state.auth.token)
     const navigate = useNavigate();
     
     const form = useForm<ReportFormValues>({

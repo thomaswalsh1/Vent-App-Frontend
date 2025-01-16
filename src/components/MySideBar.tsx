@@ -11,15 +11,10 @@ import { useSelector } from "react-redux";
 import { useDispatch } from "react-redux";
 import { setSignout } from "@/state/auth/authSlice";
 import { useToast } from "@/hooks/use-toast";
-import journalerlogo from '../assets/journalerlogo.png';
-import newjournal from '../assets/newjournal.png';
-import homeicon from '../assets/homeicon.png';
-import searchitem from '../assets/searchitem.png';
-
-import store from "@/state/store"
 import { Separator } from "./ui/separator";
 import { apiClient } from "@/lib/api-client";
 import { USER_ROUTES } from "@/utils/constants";
+import { RootState } from "@/state/store";
 
 export function MySideBar() {
   const [openSignOut, setOpenSignOut] = useState(false);
@@ -31,8 +26,8 @@ export function MySideBar() {
   
   // global pfp
  
-  const currUser = useSelector((state) => state.auth.user || { username: 'Guest' });
-  const currToken = useSelector((state) => state.auth.token);
+  const currUser = useSelector((state: RootState) => state.auth.user);
+  const currToken = useSelector((state: RootState) => state.auth.token);
 
   const getPfp = async () => {
     try {
@@ -90,7 +85,7 @@ export function MySideBar() {
         <Sidebar.Items className="flex flex-col h-[100%] align-items justify-between">
           <Sidebar.ItemGroup>
             <div className="flex flex-row justify-between">
-              <Sidebar.Logo href="" className="-mb-[1.75]">
+              <Sidebar.Logo img="" href="" className="-mb-[1.75]">
                 <p className="brand-text text-black">Vent</p>
               </Sidebar.Logo>
             </div>

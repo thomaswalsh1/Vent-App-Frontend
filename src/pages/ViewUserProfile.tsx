@@ -1,4 +1,3 @@
-import { MySideBar } from '@/components/sidebar/MySideBar'
 import ProfileView from '@/components/UserView/ProfileView'
 import React from 'react'
 import { useSelector } from 'react-redux'
