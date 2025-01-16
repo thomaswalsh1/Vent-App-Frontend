@@ -1,4 +1,6 @@
-vite-env.d.ts
+.env
+.env.local
+.env.*.local
 
 # Logs
 logs
