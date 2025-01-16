@@ -1,0 +1,27 @@
+<Button className='bg-slate-400 hidden sm:flex flex-initial items-center rounded-xl hover:bg-slate-500'
+                                onClick={isFollowed ? handleUnfollow : handleFollow}>
+                                {isFollowed ? (!profileData.viewable ? (
+                                    <span className="text-xs sm:text-md md:text-md lg:text-lg">
+                                    Requested
+                                    </span>
+                                ) : (
+                                    <span className="text-xs sm:text-md md:text-md lg:text-lg">
+                                    Following
+                                    </span>
+                                )) : (
+                                    <span className="text-xs sm:text-md md:text-md lg:text-lg">
+                                    Follow
+                                    </span>
+                                )}
+                            </Button>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger className='flex items-center focus:outline-none justify-center h-10 w-10 p-2 rounded-full bg-white hover:bg-gray-100'>
+                                    <IoMdSettings className='min-h-full min-w-full' />
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent>
+                                    <DropdownMenuLabel>{profileData.username}</DropdownMenuLabel>
+                                    <DropdownMenuSeparator />
+                                    <DropdownMenuItem>Block</DropdownMenuItem>
+                                    <DropdownMenuItem className='text-red-600' onClick={() => setShowReportMenu(true)}>Report</DropdownMenuItem>
+                                </DropdownMenuContent>
+                            </DropdownMenu>

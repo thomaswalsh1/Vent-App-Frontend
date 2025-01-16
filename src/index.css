@@ -1,0 +1,28 @@
+@import url('https://fonts.cdnfonts.com/css/norwester');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
+  /* Hide scrollbar for IE, Edge and Firefox */ 
+  .no-scrollbar {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
+  .brand-text {
+    font-family: 'Norwester', sans-serif;
+  }
+
+}
+@layer base {
+  :root {
+    --radius: 0.5rem
+    --heading-text: 'Norwester', sans-serif;
+  }
+
+}
