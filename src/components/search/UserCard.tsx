@@ -1,5 +1,5 @@
 import React from 'react'
-import emptyPfp from '@/assets/emptyPfp.png'
+import emptyPfp from '@/assets/emptypfp.png'
 import { useNavigate } from 'react-router-dom';
 
 interface UserWindowCardProps {
