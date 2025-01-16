@@ -176,7 +176,7 @@ function ProfileEditor() {
             reader.onload = (event) => {
                 setProfileData((prevData) => ({
                     ...prevData,
-                    pfp: event.target.result,
+                    pfp: event.target.result as string,
                 }));
             };
             reader.readAsDataURL(file);
