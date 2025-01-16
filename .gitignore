@@ -1,3 +1,5 @@
+vite-env.d.ts
+
 # Logs
 logs
 *.log
@@ -22,5 +24,3 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-
-.env
