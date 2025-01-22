@@ -27,6 +27,7 @@ import { useNavigate } from 'react-router-dom';
 import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { RootState } from '@/state/store'
+import LoadingAnimation from '@/components/Animation/LoadingAnimation'
 
 
 const signUpSchema = z.object({
@@ -54,7 +55,8 @@ export default function NewSign() {
     const dispatch = useDispatch();
     const [isLoading, setIsLoading] = useState(true);
     const [signInMode, setSignInMode] = useState(false);
-    const currUser = useSelector((state: RootState) => state.auth.user || { username: 'Guest' });
+    const currUser = useSelector((state: RootState) => state.auth.user);
+    const [signInLoading, setSignInLoading] = useState(false);
     const [currentForm, setCurrentForm] = useState(0);
     const [direction, setDirection] = useState(0);
     const myForms = ["Email", "Name", "Password"];
@@ -65,7 +67,9 @@ export default function NewSign() {
 
 
     async function handleSubmitSignUp(values: z.infer<typeof signUpSchema>) {
+        setSignInLoading(true);
         try {
+
             const { firstName, lastName, email, username, password } = values;
 
             const payload = {
@@ -75,6 +79,8 @@ export default function NewSign() {
                 username,
                 password,
             };
+
+            // await new Promise((resolve) => setTimeout(resolve, 5000)) // for testing the loading screen
 
             const res = await apiClient.post(SIGNUP_ROUTE, payload, { withCredentials: true });
 
@@ -91,7 +97,7 @@ export default function NewSign() {
                 description: `Welcome back, ${res.data.user.firstName}!`,
             });
 
-            navigate("/home");
+            
 
         } catch (err: any) {
             if (err.response?.status === 409) {
@@ -107,12 +113,19 @@ export default function NewSign() {
                     description: err.response.data.message
                 })
             }
+        } finally {
+            setSignInLoading(false);
+            navigate("/home");
         }
     }
 
 
     async function handleSubmitSignIn(values: z.infer<typeof signInSchema>) {
+        setSignInLoading(true);
         try {
+
+            // await new Promise((resolve) => setTimeout(resolve, 5000)) // for testing the loading screen
+
             const res = await apiClient.post(SIGNIN_ROUTE, values, { withCredentials: true })
 
             dispatch(
@@ -124,7 +137,6 @@ export default function NewSign() {
                 description: `Welcome back, ${res.data.user.firstName}!`,
             });
 
-            navigate("/home");
         } catch (err: any) {
             // Default error message
             const defaultErrorMessage = "An unexpected error occurred. Please try again.";
@@ -152,7 +164,11 @@ export default function NewSign() {
                     title: "Sign In Error",
                     description: err.message || defaultErrorMessage,
                 });
+
             }
+        } finally {
+            setSignInLoading(false);
+            navigate("/home");
         }
     }
 
@@ -314,6 +330,13 @@ export default function NewSign() {
     return (
 
         <div className='w-screen h-screen flex flex-col sm:flex-row items-center justify-center overflow-hidden bg-slate-500'>
+            {signInLoading && (
+                <div className='z-20 absolute bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl flex-col gap-y-3'>
+                    <span className='text-gray-400 italic text-lg'>Logging In</span>
+                    <LoadingAnimation />
+                </div>
+            )}
+
             <div className='flex flex-col items-center sm:items-center w-[90%] sm:w-[70%] h-[30%] sm:h-full z-10 overflow-hidden justify-center'>
                 {/* <OpeningAnimation /> */}
                 {!isLoading && (
