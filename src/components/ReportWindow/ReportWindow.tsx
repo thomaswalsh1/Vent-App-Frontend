@@ -1,5 +1,5 @@
 import { Modal } from 'flowbite-react'
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from '../ui/button'
 import { MdOutlineReport } from 'react-icons/md'
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form'
@@ -14,6 +14,7 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { Textarea } from '@/components/ui/textarea'
 import { useNavigate } from 'react-router-dom'
 import { RootState } from '@/state/store'
+import LoadingAnimation from '../Animation/LoadingAnimation'
 
 interface ReportWindowProps {
     targetType: "Post" | "User",
@@ -47,6 +48,7 @@ function ReportWindow({ targetType, id, handleShow }: ReportWindowProps) {
     const currUser = useSelector((state: RootState) => state.auth.user)
     const currToken = useSelector((state: RootState) => state.auth.token)
     const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
     
     const form = useForm<ReportFormValues>({
         resolver: zodResolver(reportSchema),
@@ -57,7 +59,10 @@ function ReportWindow({ targetType, id, handleShow }: ReportWindowProps) {
     });
 
     const onSubmit = async (data: ReportFormValues) => {
+        setLoading(true);
         try {
+            // await new Promise((res) => setTimeout(res, 4000)) // testing loading 
+
             await apiClient.post(`/reports`, {
                 ...data,
                 targetType,
@@ -74,6 +79,7 @@ function ReportWindow({ targetType, id, handleShow }: ReportWindowProps) {
                 description: "Unable to submit report."
             })
         } finally {
+            setLoading(false);
             handleShow(false);
             toast({
                 title: "Report submitted",
@@ -92,6 +98,11 @@ function ReportWindow({ targetType, id, handleShow }: ReportWindowProps) {
         >
             <Modal.Header />
             <Modal.Body>
+                {loading && (
+                    <div className='z-20 absolute w-full h-full flex items-center justify-center'>
+                        <LoadingAnimation />
+                    </div>
+                )}
                 <Form {...form}>
                     <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
                         <div className='flex flex-col gap-4 items-center justify-center'>
