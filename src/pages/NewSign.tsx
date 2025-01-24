@@ -97,7 +97,7 @@ export default function NewSign() {
                 description: `Welcome back, ${res.data.user.firstName}!`,
             });
 
-            
+
 
         } catch (err: any) {
             if (err.response?.status === 409) {
@@ -331,8 +331,10 @@ export default function NewSign() {
 
         <div className='w-screen h-screen flex flex-col sm:flex-row items-center justify-center overflow-hidden bg-slate-500'>
             {signInLoading && (
-                <div className='z-20 absolute bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl flex-col gap-y-3'>
-                    <LoadingAnimation />
+                <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl">
+                        <LoadingAnimation />
+                    </div>
                 </div>
             )}
 

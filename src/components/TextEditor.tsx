@@ -25,6 +25,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import TagInput from './InputtingTags/TagInput';
 import { Separator } from "@/components/ui/separator"
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
+import LoadingAnimation from './Animation/LoadingAnimation';
 
 
 function TextEditor() {
@@ -37,6 +38,7 @@ function TextEditor() {
     const [heldContent, setHeldContent] = useState("");
     const [heldTitle, setHeldTitle] = useState("");
     const [tags, setTags] = useState<string[]>([])
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchIsPrivate = async () => {
@@ -108,8 +110,10 @@ function TextEditor() {
     }
 
     const handlePost = async (data: z.infer<typeof formSchema>) => {
+        setLoading(true);
         try {
 
+            await new Promise((res) => setTimeout(res, 4000)); // test the loading screen
             const postData = {
                 title: data.title,
                 content: data.content,
@@ -138,8 +142,13 @@ function TextEditor() {
                 }
             })
         } catch (err) {
+            toast({
+                title: "Error Creating Post",
+                description: "There was an error creating your post.",
+            })
             console.log(err);
         } finally {
+            setLoading(false);
             toast({
                 title: "Journal Posted",
                 description: "Check your profile for more posts.",
@@ -189,6 +198,13 @@ function TextEditor() {
 
     return (
         <div className='p-4 w-full h-full overflow-y-scroll overflow-x-hidden'>
+            {loading && (
+                <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 z-50">
+                    <div className="bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl">
+                        <LoadingAnimation />
+                    </div>
+                </div>
+            )}
             <div id='container' className='h-full w-full'>
                 <AnimatePresence mode="wait">
                     {!onFinalize ? (
