@@ -87,7 +87,7 @@ export function MySideBar({ close }: { close: () => void }) {
 
   return (
     <>
-      <Sidebar aria-label="Default sidebar example" className="overflow-hidden">
+      <Sidebar aria-label="Default sidebar example" className="bg-white overflow-hidden">
         <Sidebar.Items className="flex flex-col h-[100%] align-items justify-between">
           <Sidebar.ItemGroup>
             <div className="flex flex-row justify-between">

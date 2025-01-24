@@ -191,7 +191,7 @@ function ProfileEditor() {
     }
 
     return (
-        <div className="bg-gray-100 w-full sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
+        <div className="bg-gray-100 w-[90vw] sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
             <div className="flex flex-col border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
                 <AnimatePresence mode="wait">
                     {editMode ? (

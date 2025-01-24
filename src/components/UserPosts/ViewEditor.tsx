@@ -195,8 +195,8 @@ function ViewEditor() {
                                 name="title"
                                 render={({ field }) => (
                                     <FormItem className='flex flex-col w-full text-center align-items justify-center'>
-                                        <div className='flex flex-row w-full justify-between items-center'>
-                                            <div className='w-6 h-6'>
+                                        <div className='flex flex-row px-4 sm:px-0 w-full justify-between items-center'>
+                                            <div className='m-2 w-6 h-6'>
                                                 {postLiked ? (
                                                     <FaHeart className='w-full h-full' onClick={handleUnlike} />
                                                 ) : (

@@ -179,7 +179,7 @@ function ProfileView() {
     }
 
     return (
-        <div className="bg-gray-100 w-full sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
+        <div className="bg-gray-100 w-[90vw]  sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
             <div className="bg-white flex flex-col border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
                 <div className="bg-white overflow-hidden p-4 w-full h-full flex flex-col items-center">
                     <div id="top row" className='flex flex-col w-full items-center justify-center mb-4'>
@@ -200,15 +200,15 @@ function ProfileView() {
                             <Button className='bg-slate-400 sm:flex flex-initial justify-center items-center rounded-xl hover:bg-slate-500'
                                 onClick={isFollowed ? handleUnfollow : handleFollow}>
                                 {isFollowed ? (!profileData.viewable ? (
-                                    <span className="text-xs sm:text-sm md:text-basis lg:text-lg">
+                                    <span className="text-xs sm:text-sm md:text-base lg:text-base">
                                         Requested
                                     </span>
                                 ) : (
-                                    <span className="text-xs sm:text-sm md:text-basis lg:text-lg">
+                                    <span className="text-xs sm:text-sm md:text-base lg:text-base">
                                         Following
                                     </span>
                                 )) : (
-                                    <span className="text-xs sm:text-sm md:text-basis lg:text-lg">
+                                    <span className="text-xs sm:text-sm md:text-base lg:text-base">
                                         Follow
                                     </span>
                                 )}
