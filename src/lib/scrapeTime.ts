@@ -12,18 +12,18 @@ export function scrapeTime(mongoTime: string): string {
     const diffInYears = Math.floor(diffInDays / 365);
 
     if (diffInSeconds < 60) {
-        return `${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'} ago`
+        return `${diffInSeconds}s`
     } else if (diffInMinutes < 60) {
-        return `${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'} ago`
+        return `${diffInMinutes}m`
     } else if (diffInHours < 24) {
-        return `${diffInHours} hour${diffInHours === 1 ? '' : 's'} ago`
+        return `${diffInHours}h`
     } else if (diffInDays < 7) {
-        return `${diffInDays} day${diffInDays === 1 ? '' : 's'} ago`
+        return `${diffInDays}d`
     } else if (diffInWeeks < 4) {
-        return `${diffInWeeks} week${diffInWeeks === 1 ? '' : 's'} ago`
+        return `${diffInWeeks}w`
     } else if (diffInMonths < 12) {
-        return `${diffInMonths} month${diffInMonths === 1 ? '' : 's'} ago`
+        return `${diffInMonths}m`
     } else {
-        return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`
+        return `${diffInYears}y`
     }
 }

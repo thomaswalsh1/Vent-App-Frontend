@@ -7,6 +7,7 @@ import { USER_ROUTES } from '@/utils/constants';
 import SingleNotification from './SingleNotification';
 import { log } from 'console';
 import { RootState } from '@/state/store';
+import LoadingAnimation from '../Animation/LoadingAnimation';
 
 
 function Notifications() {
@@ -28,6 +29,8 @@ function Notifications() {
         try {
             setIsFetchingMore(true);
             setLoadingNotifs(true);
+
+            // await new Promise((res) => setTimeout(res, 4000)); // test loading of getting notifications
             const res = await apiClient.get(`${USER_ROUTES}/${currUser.id}/notifications`, {
                 params: { page, limit: 10 },
                 headers: {
@@ -89,10 +92,12 @@ function Notifications() {
 
 
     return (
-        <div ref={observerRef} className="bg-gray-100 w-[75vw] h-screen flex justify-center items-center p-4">
-            <div className="w-[80%] bg-white flex flex-col border-4 rounded-2xl  h-full overflow-y-auto">
-                <div id="heading" className='flex justify-center m-4'>
-                    <span>Notifications</span>
+        <div ref={observerRef} className="bg-gray-100 w-[90vw] sm:w-[75vw] h-screen flex justify-center items-center sm:p-4">
+            <div className="w-[100%] sm:w-[80%] bg-gray-100 sm:bg-white flex flex-col sm:border-4 sm:rounded-2xl h-full overflow-y-auto">
+                <div id="heading" className='bg-white flex justify-center'>
+                    <div className='m-4'>
+                        <span>Notifications</span>
+                    </div>
                 </div>
                 <Separator />
                 {!error ? (
@@ -102,15 +107,19 @@ function Notifications() {
                                 {visibleNotifs.map((notif, index) => (
                                     <div
                                         key={index}
-                                        className="flex rounded-2xl m-3 mb-8 mt-8 flex-row items-start p-3 max-h-[40rem] overflow-hidden"
+                                        className="flex rounded-2xl mx-2 my-2 sm:m-3 sm:my-8 flex-row items-start p-2 sm:p-3 max-h-[40rem] overflow-hidden"
                                     >
                                         <SingleNotification data={notif} />
                                     </div>
                                 ))}
                             </div>
                         ) : (
-                            <div className='flex justify-center items-center'>
-                                <span>No notifications</span>
+                            <div className='flex justify-center my-8 items-center'>
+                                {loadingNotifs ? (
+                                    <LoadingAnimation />
+                                ) : (
+                                    <span>No notifications</span>
+                                )}
                             </div>
                         )}
                     </div>

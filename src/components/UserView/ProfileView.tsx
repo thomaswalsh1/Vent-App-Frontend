@@ -183,7 +183,7 @@ function ProfileView() {
             <div className="bg-white flex flex-col border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
                 <div className="bg-white overflow-hidden p-4 w-full h-full flex flex-col items-center">
                     <div id="top row" className='flex flex-col w-full items-center justify-center mb-4'>
-                        
+
                         <div>
                             <img
                                 src={profileData?.pfp || emptyPfp}
@@ -244,7 +244,19 @@ function ProfileView() {
                     <span className="mt-2 italic text-center mb-4">{profileData?.bio ? `"${profileData.bio}"` : 'No bio yet!'}</span>
 
                     <div className='flex flex-col items-center mt-4 h-[60vh] w-full'>
-                        <PostCarousel userId={id} />
+                        {(!profileData.viewable) ? (
+                            <div className='flex flex-col items-center justify-center'>
+                                <CiLock className='w-48 h-48'/>
+                                <span className='font-bold'>
+                                    This account is private
+                                </span>
+                                <span>
+                                    Follow them to see their posts.
+                                </span>
+                            </div>
+                        ) : (
+                            <PostCarousel userId={id} />
+                        )}
                     </div>
                 </div>
             </div>

@@ -113,7 +113,7 @@ function TextEditor() {
         setLoading(true);
         try {
 
-            await new Promise((res) => setTimeout(res, 4000)); // test the loading screen
+            // await new Promise((res) => setTimeout(res, 4000)); // test the loading screen
             const postData = {
                 title: data.title,
                 content: data.content,

@@ -9,6 +9,7 @@ import { useSelector } from 'react-redux';
 import { Button } from '@/components/ui/button';
 import { TiDelete } from "react-icons/ti";
 import { Description } from '@radix-ui/react-toast';
+import { TiDeleteOutline } from "react-icons/ti";
 import { toast } from '@/hooks/use-toast';
 import { RootState } from '@/state/store';
 
@@ -114,7 +115,7 @@ function SingleNotification({ data }: NotifProps) {
             })
         } finally {
             setLoadedData((prev) => Object.assign(prev, { accepted: true }));
-            setLoadedData((prev) => ({...prev, type: "follow"}))
+            setLoadedData((prev) => ({ ...prev, type: "follow" }))
             console.log(loadedData);
             toast({
                 title: "Follower Accepted",
@@ -132,25 +133,28 @@ function SingleNotification({ data }: NotifProps) {
                 <div className='flex flex-row items-center justify-center'>
                     <img src={loadedData.pfp} alt={`${loadedData.username}'s profile`} className='border-[2px] rounded-full w-12 h-12' />
                     {loadedData.type === "follow" && (
-                        <span className='ml-3'><a className='italic'>{loadedData.username}</a> followed you!</span>
+                        <span className='text-xs sm:text-base ml-3'><a className='italic'>{loadedData.username}</a> followed you!</span>
                     )}
                     {loadedData.type === "like" && (
-                        <span className='ml-3'><a className='italic'>{loadedData.username}</a> liked your <a href={`/posts/${data.likedPostId}`}>Post</a></span>
+                        <span className='text-xs sm:text-base ml-3'><a className='italic'>{loadedData.username}</a> liked your <a href={`/posts/${data.likedPostId}`}>Post</a></span>
                     )}
                     {loadedData.type === "request" && (
-                        <span className='ml-3'><a className='italic'>{loadedData.username}</a> requested to follow you.</span>
+                        <span className='text-xs sm:text-base ml-3'><a className='italic'>{loadedData.username}</a> requested to follow you.</span>
                     )}
                 </div>
                 <div className='flex flex-row items-center'>
-                    <div className='flex flex-row items-center justify-center gap-2 mr-2'>
+                    <div className='flex flex-col sm:flex-row items-center justify-center gap-2 mr-2'>
                         {loadedData.type === "request" && (
-                            <Button className='rounded-xl bg-slate-400' onClick={(e) => {e.stopPropagation(); handleAcceptRequest();}}> Accept </Button>
+                            <Button className='text-xs sm:text-sm w-16 rounded-xl bg-slate-400' onClick={(e) => { e.stopPropagation(); handleAcceptRequest(); }}> Accept </Button>
                         )}
                         {loadedData.type === "request" && (
-                            <Button className='rounded-xl bg-slate-400' onClick={(e) => {e.stopPropagation();}}>Delete</Button>
+                            <TiDelete className='rounded-full w-8 h-8' onClick={(e) => e.stopPropagation() }/>
                         )}
                     </div>
-                    {scrapeTime(loadedData.createdAt)}
+                    <span className='text-sm sm:text-base'>
+                        {scrapeTime(loadedData.createdAt)}
+
+                    </span>
                 </div>
             </div>
 
