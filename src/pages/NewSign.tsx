@@ -332,7 +332,6 @@ export default function NewSign() {
         <div className='w-screen h-screen flex flex-col sm:flex-row items-center justify-center overflow-hidden bg-slate-500'>
             {signInLoading && (
                 <div className='z-20 absolute bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl flex-col gap-y-3'>
-                    <span className='text-gray-400 italic text-lg'>Logging In</span>
                     <LoadingAnimation />
                 </div>
             )}

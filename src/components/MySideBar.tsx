@@ -15,8 +15,9 @@ import { Separator } from "./ui/separator";
 import { apiClient } from "@/lib/api-client";
 import { USER_ROUTES } from "@/utils/constants";
 import { RootState } from "@/state/store";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
-export function MySideBar() {
+export function MySideBar({ close }: { close: () => void }) {
   const [openSignOut, setOpenSignOut] = useState(false);
   const [pfpLoaded, setPfpLoaded] = useState(false);
   const [pfp, setPfp] = useState(null);
@@ -24,7 +25,7 @@ export function MySideBar() {
   const dispatch = useDispatch();
   const { toast } = useToast();
   
-  // global pfp
+  const isDesktop = useMediaQuery("(min-width: 758px)"); // if on mobile, close after every button click
  
   const currUser = useSelector((state: RootState) => state.auth.user);
   const currToken = useSelector((state: RootState) => state.auth.token);
@@ -60,22 +61,27 @@ export function MySideBar() {
   };
 
   const handleNewPost = () => {
+    if (!isDesktop) close();
     navigate("/new");
   }
 
   const handleGoHome = () => {
+    if (!isDesktop) close();
     navigate("/home");
   }
 
   const handleViewMyProfile = () => {
+    if (!isDesktop) close();
     navigate("/profile")
   }
 
   const handleGoToSearch = () => {
+    if (!isDesktop) close();
     navigate("/search")
   }
   
   const handleSeeNotifs = () => {
+    if (!isDesktop) close();
     navigate("/notifications")
   }
 
