@@ -22,6 +22,7 @@ import {
 import { IoInformationCircleOutline } from "react-icons/io5";
 import { MdVisibility } from 'react-icons/md';
 import { RootState } from '@/state/store';
+import Rightbar from './Rightbar/Rightbar';
 
 
 function ProfileEditor() {
@@ -33,6 +34,7 @@ function ProfileEditor() {
 
     const [editMode, setEditMode] = useState(false);
     const [draftView, setDraftView] = useState(false);
+    const [rightbarVisible, setRightbarVisible] = useState(false);
     const [profileData, setProfileData] = useState({
         firstName: '',
         lastName: '',
@@ -44,6 +46,8 @@ function ProfileEditor() {
         num_following: 0,
         private: false,
     });
+
+    const [currRightbarMode, setCurrRightbarMode] = useState("followers")
 
 
     const [originalData, setOriginalData] = useState({
@@ -63,7 +67,7 @@ function ProfileEditor() {
      */
     const fetchUserProfile = async () => {
         try {
-            
+
             const response = await apiClient.get(`${USER_ROUTES}/${currUser.id}`, {
                 headers: {
                     Authorization: `Bearer ${currToken}`
@@ -71,7 +75,6 @@ function ProfileEditor() {
             });
 
             const fetchedData = response.data || {};
-            console.log(fetchedData.private)
 
             setProfileData({
                 firstName: fetchedData?.firstName || '',
@@ -128,7 +131,6 @@ function ProfileEditor() {
      * Submit updated data to server
      */
     const handleSave = async () => {
-        console.log(profileData);
         try {
             const res = await apiClient.put(
                 `${USER_ROUTES}/${currUser.id}`,
@@ -190,8 +192,28 @@ function ProfileEditor() {
         }))
     }
 
+    const showFollowers = () => {
+        setCurrRightbarMode("followers");
+        setRightbarVisible(true);
+    }
+
+    const showFollowing = () => {
+        setCurrRightbarMode("following");
+        setRightbarVisible(true);
+    }
+
     return (
         <div className="bg-gray-100 w-[90vw] sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
+            {rightbarVisible && (
+                <div
+                    className="fixed top-0 w-[80%] sm:w-[40%] right-0 h-full z-20 transition-transform duration-300 ease-in-out overflow-hidden"
+                    style={{
+                        transform: !rightbarVisible ? `translateX(100%)`: `translateX(0)`,
+                    }}
+                >
+                    <Rightbar close={() => setRightbarVisible(false) } mode={currRightbarMode} id={currUser.id}/>
+                </div>
+            )}
             <div className="flex flex-col border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
                 <AnimatePresence mode="wait">
                     {editMode ? (
@@ -243,7 +265,7 @@ function ProfileEditor() {
                                     <HoverCardTrigger className='flex items-center justify-center gap-2'>
                                         <Switch id="set-private-account" checked={profileData.private === true} onCheckedChange={handlePrivacyChange} className='' />
                                         <Label htmlFor="set-private-account">Private account</Label>
-                                        <IoInformationCircleOutline className='mt-1'/>
+                                        <IoInformationCircleOutline className='mt-1' />
                                     </HoverCardTrigger>
                                     <HoverCardContent>
                                         <span className='text-sm'>
@@ -281,11 +303,11 @@ function ProfileEditor() {
                                     <span className='text-xs sm:text-base font-bold'>Posts</span>
                                     <span>{profileData.num_posts}</span>
                                 </div>
-                                <div className='flex w-12 flex-col items-center'>
+                                <div className='flex w-12 flex-col items-center cursor-pointer' onClick={showFollowers}>
                                     <span className='text-xs sm:text-base font-bold'>Followers</span>
                                     <span>{profileData.num_followers}</span>
                                 </div>
-                                <div className='flex w-12 flex-col items-center'>
+                                <div className='flex w-12 flex-col items-center cursor-pointer' onClick={showFollowing}>
                                     <span className='text-xs sm:text-base font-bold'>Following</span>
                                     <span>{profileData.num_following}</span>
                                 </div>

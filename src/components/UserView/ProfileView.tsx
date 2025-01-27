@@ -21,6 +21,7 @@ import { useToast } from '@/hooks/use-toast';
 import ReportWindow from '../ReportWindow/ReportWindow';
 import { CiLock } from "react-icons/ci";
 import { RootState } from '@/state/store';
+import Rightbar from '../Rightbar/Rightbar';
 
 interface Profile {
     username: string;
@@ -55,6 +56,8 @@ function ProfileView() {
     const [loading, setLoading] = useState(true);
     const [settings, openSettings] = useState(false);
     const [showReportMenu, setShowReportMenu] = useState(false);
+    const [rightbarVisible, setRightbarVisible] = useState(false);
+    const [currRightbarMode, setCurrRightbarMode] = useState("followers");
 
     const currUser: CurrentUser = useSelector((state: RootState) => state.auth.user);
     const currToken = useSelector((state: RootState) => state.auth.token);
@@ -77,7 +80,6 @@ function ProfileView() {
                     },
                 })
                 const fetchedData = response?.data || {};
-                console.log(fetchedData);
                 setProfileData({
                     username: fetchedData.username || '',
                     firstName: fetchedData.firstName || '',
@@ -178,8 +180,28 @@ function ProfileView() {
         );
     }
 
+    const showFollowers = () => {
+        setCurrRightbarMode("followers");
+        setRightbarVisible(true);
+    }
+
+    const showFollowing = () => {
+        setCurrRightbarMode("following");
+        setRightbarVisible(true);
+    }
+
     return (
         <div className="bg-gray-100 w-[90vw]  sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
+            {rightbarVisible && (
+                <div
+                    className="fixed top-0 w-[80%] sm:w-[40%] right-0 h-full z-20 transition-transform duration-300 ease-in-out overflow-hidden"
+                    style={{
+                        transform: !rightbarVisible ? `translateX(100%)`: `translateX(0)`,
+                    }}
+                >
+                    <Rightbar close={() => setRightbarVisible(false) } mode={currRightbarMode} id={id}/>
+                </div>
+            )}
             <div className="bg-white flex flex-col border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
                 <div className="bg-white overflow-hidden p-4 w-full h-full flex flex-col items-center">
                     <div id="top row" className='flex flex-col w-full items-center justify-center mb-4'>
@@ -232,11 +254,11 @@ function ProfileView() {
                             <span className='text-xs sm:text-base font-bold'>Posts</span>
                             <span>{profileData.num_posts}</span>
                         </div>
-                        <div className='flex w-12 flex-col items-center'>
+                        <div className={`flex w-12 flex-col items-center ${profileData.viewable? "cursor-pointer" : "" }`} onClick={showFollowers}>
                             <span className='text-xs sm:text-base font-bold'>Followers</span>
                             <span>{profileData.num_followers}</span>
                         </div>
-                        <div className='flex w-12 flex-col items-center'>
+                        <div className={`flex w-12 flex-col items-center ${profileData.viewable? "cursor-pointer" : "" }`} onClick={showFollowing}>
                             <span className='text-xs sm:text-base font-bold'>Following</span>
                             <span>{profileData.num_following}</span>
                         </div>
