@@ -51,7 +51,7 @@ function Rightbar({ close, mode, id }: { close: () => void, mode: string, id: st
     setIsFetchingMore(true);
     setError(null);
     try {
-      await new Promise((res) => setTimeout(res, 1000)); // test loading
+      // await new Promise((res) => setTimeout(res, 1000)); // test loading
       const res = await apiClient.get(`${USER_ROUTES}/${id}/${mode}`, {
         params: { page, limit: 10 },
         headers: {

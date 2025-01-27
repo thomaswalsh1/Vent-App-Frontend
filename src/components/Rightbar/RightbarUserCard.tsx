@@ -29,7 +29,7 @@ function RightbarUserCard({ userId }: { userId: string }) {
     const fetchUserData = async () => {
         setLoading(true);
         try {
-            await new Promise((res) => setTimeout(res, 2000)); // test loading
+            // await new Promise((res) => setTimeout(res, 2000)); // test loading
             const res = await apiClient.get(`${USER_ROUTES}/${userId}`, {
                 headers: {
                     Authorization: `Bearer ${currToken}`
