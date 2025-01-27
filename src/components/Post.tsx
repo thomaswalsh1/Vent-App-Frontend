@@ -29,7 +29,7 @@ export default function Post({ data, isDraft }: PostProps) {
         <a className="text-md italic pt-2 pb-2 hover:text-slate-600" onClick={(e) => e.stopPropagation()} href={`/users/${data.userId}`}>{data.author}</a>
         <p className='flex flex-row'>{
           data.tags.map((item: string, idx) => idx < 4 ? ( // only show first 4 tags
-            <a className='text-sm text-blue-400 ml-1 cursor-pointer' onClick={(e) => {e.stopPropagation(); navigateToSearch(data.tags[idx])}}>{`#${data.tags[idx]} `}</a>
+            <a key={idx} className='text-sm text-blue-400 ml-1 cursor-pointer' onClick={(e) => {e.stopPropagation(); navigateToSearch(data.tags[idx])}}>{`#${data.tags[idx]} `}</a>
           ): (<a />) )
         }
         </p>

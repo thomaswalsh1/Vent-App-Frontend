@@ -40,7 +40,6 @@ function Notifications() {
             const notifications = res.data.notifs;
             const newHasMore = res.data.hasMore;
 
-            console.log(notifications);
             // If it's the first page, replace the notifications
             // Otherwise append them
             if (page === 1) {

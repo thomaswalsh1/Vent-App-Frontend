@@ -31,7 +31,6 @@ function PostCarousel({ userId }: { userId: string }) {
                         Authorization: `Bearer ${currToken}`
                     }
                 });
-                console.log(res.data.posts);
                 const postPromises = res.data.posts.map(async (postId: string) => {
                     try {
                         const res = await apiClient.get(`${POST_ROUTES}/${postId}`, {
@@ -42,7 +41,6 @@ function PostCarousel({ userId }: { userId: string }) {
                         return res.data
                     } catch (error: unknown) {
                         if (axios.isAxiosError(error) && error.response?.status === 401) {
-                            console.log(`Skipping post ${postId} due to 401 error`);
                             return null;
                         }
                         throw error; // throw for other errors
@@ -50,7 +48,6 @@ function PostCarousel({ userId }: { userId: string }) {
                 });
                 let posts = await Promise.all(postPromises); // when all are completed
                 posts = posts.filter((post) => post !== null);
-                console.log("posts are: " + posts);
                 setVisiblePosts(posts);
             } catch (error) {
                 console.log(`Error fetching user data: ${error}`)
@@ -74,9 +71,9 @@ function PostCarousel({ userId }: { userId: string }) {
                         </CarouselItem>
                     )}
                     {!isLoading && visiblePosts.length !== 0 && visiblePosts.map((content, index) => (
-                            <CarouselItem key={index} className='h-full'>
-                                <div className='h-full'>
-                                    <Post data={content} />
+                            <CarouselItem className='h-full' key={index}>
+                                <div className='h-full' key={index}>
+                                    <Post data={content} key={index}/>
                                 </div>
                             </CarouselItem>
                     ))}
