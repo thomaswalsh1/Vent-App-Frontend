@@ -14,17 +14,18 @@ import { PostType } from '@/lib/PostType';
 import { GrDocumentMissing } from "react-icons/gr";
 import axios, { AxiosError } from 'axios';
 import { RootState } from '@/state/store';
+import LoadingAnimation from '../Animation/LoadingAnimation';
 
 function PostCarousel({ userId }: { userId: string }) {
     const [visiblePosts, setVisiblePosts] = useState([]);
-    const [isLoading, setIsLoading] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     const currToken = useSelector((state: RootState) => state.auth.token);
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                setIsLoading(true);
+                // await new Promise((res) => setTimeout(res, 4000)); // test load 
 
                 const res = await apiClient.get(`${USER_ROUTES}/${userId}`, {
                     headers: {
@@ -62,6 +63,13 @@ function PostCarousel({ userId }: { userId: string }) {
         <div id='carousel-container' className='w-full bg-slate-300 p-3 border-4 rounded-2xl border-transparent h-full flex justify-center items-center'>
             <Carousel className="w-[90%] h-full flex justify-center items-center">
                 <CarouselContent className='h-full'>
+                    {isLoading && (
+                        <CarouselItem>
+                            <div className='h-full flex flex-col items-center justify-center gap-y-8 bg-white'>
+                                <LoadingAnimation />
+                            </div>
+                        </CarouselItem>
+                    )}
                     {!isLoading && visiblePosts.length === 0 && (
                         <CarouselItem>
                             <div className='h-full flex flex-col items-center justify-center gap-y-8 bg-white'>
@@ -71,11 +79,11 @@ function PostCarousel({ userId }: { userId: string }) {
                         </CarouselItem>
                     )}
                     {!isLoading && visiblePosts.length !== 0 && visiblePosts.map((content, index) => (
-                            <CarouselItem className='h-full' key={index}>
-                                <div className='h-full' key={index}>
-                                    <Post data={content} key={index}/>
-                                </div>
-                            </CarouselItem>
+                        <CarouselItem className='h-full' key={index}>
+                            <div className='h-full' key={index}>
+                                <Post data={content} key={index} />
+                            </div>
+                        </CarouselItem>
                     ))}
                 </CarouselContent>
                 <CarouselPrevious />

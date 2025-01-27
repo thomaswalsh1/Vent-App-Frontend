@@ -20,15 +20,31 @@ import { useMediaQuery } from "@/hooks/useMediaQuery";
 export function MySideBar({ close }: { close: () => void }) {
   const [openSignOut, setOpenSignOut] = useState(false);
   const [pfpLoaded, setPfpLoaded] = useState(false);
+  const [unreadNotifs, setUnreadNotifs] = useState(false);
   const [pfp, setPfp] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { toast } = useToast();
-  
+
   const isDesktop = useMediaQuery("(min-width: 758px)"); // if on mobile, close after every button click
- 
+
   const currUser = useSelector((state: RootState) => state.auth.user);
   const currToken = useSelector((state: RootState) => state.auth.token);
+
+  const checkUnreadNotifications = async () => {
+    try {
+      const res = await apiClient.get(`${USER_ROUTES}/${currUser.id}/notifications/status`, {
+        headers: {
+          Authorization: `Bearer ${currToken}`
+        }
+      })
+      const unreadNotifs = res.data.unreadNotificationsFound
+      setUnreadNotifs(unreadNotifs);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
 
   const getPfp = async () => {
     try {
@@ -48,8 +64,9 @@ export function MySideBar({ close }: { close: () => void }) {
   // load the pfp
   useEffect(() => {
     getPfp();
+    checkUnreadNotifications();
   }, [])
-  
+
 
   const handleSignOut = () => {
     dispatch(setSignout());
@@ -79,7 +96,7 @@ export function MySideBar({ close }: { close: () => void }) {
     if (!isDesktop) close();
     navigate("/search")
   }
-  
+
   const handleSeeNotifs = () => {
     if (!isDesktop) close();
     navigate("/notifications")
@@ -106,7 +123,13 @@ export function MySideBar({ close }: { close: () => void }) {
               Search
             </Sidebar.Item>
             <Sidebar.Item onClick={handleSeeNotifs} icon={IoIosNotifications}>
-              Notifications
+              <div className="flex flex-row items-center">
+                Notifications
+                {unreadNotifs && (
+                  <div className="w-4 h-4 mt-1 ml-2 rounded-full bg-blue-400"></div>
+                )}
+              </div>
+
             </Sidebar.Item>
             <Sidebar.Item
               onClick={() => setOpenSignOut(true)}
