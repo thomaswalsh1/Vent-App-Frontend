@@ -11,6 +11,7 @@ import {
 import Post from '../Post';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
+import { GrDocumentMissing } from 'react-icons/gr';
 
 function DraftCarousel({ userId }: { userId: string }) {
     const [visibleDrafts, setVisibleDrafts] = useState([]);
@@ -37,6 +38,14 @@ function DraftCarousel({ userId }: { userId: string }) {
         <div id='carousel-container' className='w-full bg-slate-300 p-3 border-4 rounded-2xl border-transparent h-full flex justify-center items-center'>
             <Carousel className="w-[90%] h-full flex justify-center items-center">
                 <CarouselContent className='h-full'>
+                    {visibleDrafts.length === 0 && (
+                                            <CarouselItem>
+                                                <div className='h-full flex flex-col items-center justify-center gap-y-8 bg-white'>
+                                                    <GrDocumentMissing className='w-24 h-24' />
+                                                    <span className='font-bold text-lg'>No drafts yet!</span>
+                                                </div>
+                                            </CarouselItem>
+                                        )}
                     {visibleDrafts.map((content, index) => (
                         <CarouselItem key={index} className='h-full'>
                             <div className='h-full'>
