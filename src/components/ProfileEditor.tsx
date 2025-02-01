@@ -5,11 +5,12 @@ import { Button } from './ui/button';
 import { Input } from './ui/input';
 import emptyPfp from "@/assets/emptypfp.png";
 import { apiClient } from '@/lib/api-client';
-import { USER_ROUTES } from '@/utils/constants';
+import { CHECK_CONFIRM_ROUTE, SEND_CONFIRM_ROUTE, USER_ROUTES } from '@/utils/constants';
 import { setSignin } from '@/state/auth/authSlice';
 import { toast, useToast } from '@/hooks/use-toast';
 import PostCarousel from './PostCarousel/PostCarousel';
 import { motion, AnimatePresence } from 'framer-motion';
+import { LuInfo } from "react-icons/lu";
 import { Separator } from './ui/separator';
 import DraftCarousel from './PostCarousel/DraftCarousel';
 import { Switch } from "@/components/ui/switch"
@@ -26,6 +27,7 @@ import Rightbar from './Rightbar/Rightbar';
 import LoadingAnimation from './Animation/LoadingAnimation';
 import { IoMdSettings } from 'react-icons/io';
 import AdditionalSettings from './Settings/AdditionalSettings';
+import { IoMdClose } from "react-icons/io";
 
 
 function ProfileEditor() {
@@ -37,6 +39,7 @@ function ProfileEditor() {
 
     const [editMode, setEditMode] = useState(false);
     const [draftView, setDraftView] = useState(false);
+    const [verified, setVerified] = useState(false);
     const [loading, setLoading] = useState(true);
     const [loadingSave, setLoadingSave] = useState(false);
     const [rightbarVisible, setRightbarVisible] = useState(false);
@@ -96,7 +99,7 @@ function ProfileEditor() {
                 num_following: fetchedData?.num_following || 0,
                 private: fetchedData?.private || false
             }
-            setProfileData({ ...foundData});
+            setProfileData({ ...foundData });
             setHeldData({ ...foundData });
         } catch (error) {
             console.error('Error while fetching user data:', error);
@@ -104,6 +107,21 @@ function ProfileEditor() {
             setLoading(false);
         }
     };
+
+
+    const checkIfVerified = async () => {
+        try {
+            const res = await apiClient.get(CHECK_CONFIRM_ROUTE, {
+                headers: {
+                    Authorization: `Bearer ${currToken}`
+                }
+            })
+            // console.log(res.data.isConfirmed);
+            setVerified(res.data.isConfirmed)
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     /**
      * Handle updates on text fields in the UI
@@ -187,6 +205,7 @@ function ProfileEditor() {
         if (currUser?.id) {
             fetchUserProfile();
         }
+        checkIfVerified();
     }, [currUser?.id]);
 
     const handleImageUpload = (e) => {
@@ -224,6 +243,24 @@ function ProfileEditor() {
         setShowAdditionalSettings(true);
     }
 
+    const [confirmBox, setConfirmBox] = useState(true);
+    const [emailSent, setEmailSent] = useState(false);
+    const [emailSending, setEmailSending] = useState(false);
+    const [errorEmail, setErrorEmail] = useState(false);
+    const sendNewEmail = async () => {
+        setEmailSending(true);
+        try {
+            // await new Promise((res) => setTimeout(res, 2000)); // test loading
+            await apiClient.post(SEND_CONFIRM_ROUTE, {});
+            setEmailSent(true);
+        } catch (error) {
+            console.log(error);
+            setErrorEmail(true);
+        } finally {
+            setEmailSending(false);
+        }
+    }
+
     return (
         <div className="bg-gray-100 w-[90vw] sm:w-[75vw] h-[100vh] flex justify-center items-center p-2 sm:p-4">
             {loadingSave && (
@@ -246,6 +283,25 @@ function ProfileEditor() {
             {showAdditionalSettings && (
                 <div>
                     <AdditionalSettings close={() => setShowAdditionalSettings(false)} />
+                </div>
+            )}
+            {!verified && confirmBox && (
+                <div className='z-10 absolute md:top-10 p-4 md:left-[70%] flex flex-col items-center justify-center w-64 h-32 rounded-xl drop-shadow-xl border-2 bg-white'>
+                    <IoMdClose className='cursor-pointer opacity-30 absolute right-[5%] top-[5%] w-6 h-6' onClick={() => setConfirmBox(false)}/>
+                    <div className='flex flex-row items-center justify-center gap-x-2'>
+                        <LuInfo className='w-16 h-16 opacity-50' />
+                        <span className='text-xs sm:text-sm'>
+                            Check your email to verify your account.
+                        </span>
+                    </div>
+                    <a className={`italic ${emailSent || errorEmail || emailSending ? "" : "cursor-pointer underline"} text-xs text-center sm:text-sm`} onClick={sendNewEmail}>
+                        {errorEmail ? "Error sending your email." : emailSending ? "Sending..." :
+                        emailSent ? (
+                            "Sent to inbox!"
+                        ) : (
+                            "Send new email"
+                        )}
+                    </a>
                 </div>
             )}
             <div className="flex flex-col bg-white border-4 rounded-2xl w-full sm:w-[80%] justify-center items-center h-[100%] overflow-y-auto">
@@ -281,7 +337,7 @@ function ProfileEditor() {
                                         />
                                     </div>
                                     <div>
-                                        <IoMdSettings className='w-8 h-8 cursor-pointer' onClick={openAdditionalSettings}/>
+                                        <IoMdSettings className='w-8 h-8 cursor-pointer' onClick={openAdditionalSettings} />
                                     </div>
                                 </div>
                                 <div className="flex flex-row items-center m-4">

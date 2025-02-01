@@ -43,7 +43,7 @@ const TagInput: React.FC<TagInputProps> = ({ value, onChange, placeholder = "Add
           key={index}
           className="flex items-center bg-slate-400 text-white rounded px-2 py-1 m-1"
         >
-          <span>{tag}</span>
+          <span className='text-xs sm:text-sm md:text-base'>{tag}</span>
           <button
             type="button"
             className="ml-2 text-white hover:text-white"
@@ -59,7 +59,7 @@ const TagInput: React.FC<TagInputProps> = ({ value, onChange, placeholder = "Add
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
         placeholder={placeholder}
-        className="w-[25%] outline-none focus:border-transparent p-1 m-1"
+        className="w-[30%] sm:w-[25%] text-xs sm:text-sm md:text-base outline-none focus:border-transparent p-1 m-1"
       />
     </div>
   );

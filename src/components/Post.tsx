@@ -1,3 +1,4 @@
+import { useSidebar } from '@/context/SidebarContext';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -19,11 +20,13 @@ export default function Post({ data, isDraft }: PostProps) {
 
   const navigate = useNavigate();
 
+  const { isOpen } = useSidebar(); 
+
   const navigateToSearch = (query: string) => {
     navigate(`/search?query=${encodeURIComponent(query)}`)
   }
   return (
-    <div className="bg-white rounded-lg h-full w-full overflow-hidden" onClick={(e) => !isDraft ? navigate(`/posts/${data._id}`) : navigate(`/profile/drafts/${"blockchain"}`)}>
+    <div className={`bg-white ${isOpen ? "min-w-[20rem]" : ""} rounded-lg h-full w-full overflow-hidden`} onClick={(e) => !isDraft ? navigate(`/posts/${data._id}`) : navigate(`/profile/drafts/${"blockchain"}`)}>
       <div className="p-4">
         <h2 className="text-xl font-bold line-clamp-2">{data.title}</h2>
         <a className="text-md italic pt-2 pb-2 hover:text-slate-600" onClick={(e) => e.stopPropagation()} href={`/users/${data.userId}`}>{data.author}</a>

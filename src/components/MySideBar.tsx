@@ -13,7 +13,7 @@ import { setSignout } from "@/state/auth/authSlice";
 import { useToast } from "@/hooks/use-toast";
 import { Separator } from "./ui/separator";
 import { apiClient } from "@/lib/api-client";
-import { USER_ROUTES } from "@/utils/constants";
+import { CHECK_CONFIRM_ROUTE, USER_ROUTES } from "@/utils/constants";
 import { RootState } from "@/state/store";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
 
@@ -21,6 +21,7 @@ export function MySideBar({ close }: { close: () => void }) {
   const [openSignOut, setOpenSignOut] = useState(false);
   const [pfpLoaded, setPfpLoaded] = useState(false);
   const [unreadNotifs, setUnreadNotifs] = useState(false);
+  const [verified, setVerified] = useState(false);
   const [pfp, setPfp] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -40,6 +41,20 @@ export function MySideBar({ close }: { close: () => void }) {
       })
       const unreadNotifs = res.data.unreadNotificationsFound
       setUnreadNotifs(unreadNotifs);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const checkIfVerified = async () => {
+    try {
+      const res = await apiClient.get(CHECK_CONFIRM_ROUTE, {
+        headers: {
+          Authorization: `Bearer ${currToken}`
+        }
+      })
+      // console.log(res.data.isConfirmed);
+      setVerified(res.data.isConfirmed)
     } catch (error) {
       console.error(error);
     }
@@ -65,6 +80,7 @@ export function MySideBar({ close }: { close: () => void }) {
   useEffect(() => {
     getPfp();
     checkUnreadNotifications();
+    checkIfVerified();
   }, [])
 
 
@@ -152,7 +168,13 @@ export function MySideBar({ close }: { close: () => void }) {
                   <HiUser className="h-8 w-8 text-gray-400" />
                 )
             } onClick={handleViewMyProfile}>
-              {currUser?.username || 'Profile'}
+              <div className="flex flex-row">
+                {currUser?.username || 'Profile'}
+                {!verified && (
+                  <div className="w-4 h-4 mt-[0.35rem] ml-2 rounded-full bg-blue-400"></div>
+                )}
+              </div>
+
             </Sidebar.Item>
           </SidebarItemGroup>
         </Sidebar.Items>

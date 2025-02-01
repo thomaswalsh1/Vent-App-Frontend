@@ -5,6 +5,7 @@ import { POST_ROUTES } from '@/utils/constants';
 import { Skeleton } from '@/components/ui/skeleton';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/state/store';
+import { useSidebar } from '@/context/SidebarContext';
 
 interface PostData {
   title: string;
@@ -30,6 +31,8 @@ export default function Feed() {
   const [hasMore, setHasMore] = useState(true);
   const [isFetchingMore, setIsFetchingMore] = useState(false);
   const observerRef = useRef<HTMLDivElement>(null);
+
+  const { isOpen } = useSidebar()
 
 
   const getPosts = async (page: number) => {
@@ -98,7 +101,7 @@ export default function Feed() {
           {visiblePosts.map((data, index) => (
             <div
               key={index}
-              className="flex rounded-2xl m-3 mb-8 mt-8 min-h-[15rem] border-2 flex-row items-start max-h-[40rem] overflow-hidden"
+              className={`flex rounded-2xl text-xs sm:text-md md:text-lg m-3 mb-8 mt-8 min-h-[15rem] border-2 flex-row items-start max-h-[40rem] overflow-hidden`}
             >
               <Post data={data} />
             </div>

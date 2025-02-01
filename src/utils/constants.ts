@@ -12,3 +12,8 @@ export const USER_ROUTES = `${HOST}/users`;
 export const SEARCH_USER_ROUTE = `${USER_ROUTES}/search`
 
 export const APP_STORE_ROUTE = `https://tmwalsh.com`;
+
+export const CONFIRM_LINK_ROUTE = `${AUTH_ROUTES}/confirmation`
+export const CHECK_CONFIRM_ROUTE = `${CONFIRM_LINK_ROUTE}/status`
+export const SEND_CONFIRM_ROUTE = `${CONFIRM_LINK_ROUTE}/send`
+export const VERIFY_CONFIRM_ROUTE = `${CONFIRM_LINK_ROUTE}/confirm`

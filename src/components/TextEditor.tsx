@@ -8,7 +8,7 @@ import TipTap from './tiptap/TipTap';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from "@/hooks/use-toast"
 import { apiClient } from '@/lib/api-client';
-import { NEW_POST_ROUTE, POST_ROUTES, USER_ROUTES } from '@/utils/constants';
+import { CHECK_CONFIRM_ROUTE, NEW_POST_ROUTE, POST_ROUTES, USER_ROUTES } from '@/utils/constants';
 import { useSelector } from 'react-redux';
 import store, { RootState } from '@/state/store';
 import { ContentMatch } from '@tiptap/pm/model';
@@ -93,7 +93,23 @@ function TextEditor() {
 
     const navigate = useNavigate();
 
-
+    const [verified, setVerified] = useState(false);
+    const checkIfVerified = async () => {
+        try {
+            const res = await apiClient.get(CHECK_CONFIRM_ROUTE, {
+                headers: {
+                    Authorization: `Bearer ${currToken}`
+                }
+            })
+            if (res.data.isConfirmed === true) {
+                setVerified(true)
+            } else {
+                setVerified(false);
+            }
+        } catch (error) {
+            console.error(error);
+        }
+    }
 
     // switch to submission page
     const switchToSubmit = () => {
@@ -344,11 +360,11 @@ function TextEditor() {
                                                     </form>
                                                 </Form>
                                                 <div id="buttons" className='flex flex-row items-center justify-center'>
-                                                    <Button onClick={() => handlePost({
+                                                    <Button disabled={!verified} onClick={() => handlePost({
                                                         title: heldTitle,
                                                         content: heldContent
                                                     })} className='sm:w-24 bg-slate-600 rounded-xl m-1'>
-                                                        Post
+                                                        Post    
                                                     </Button>
                                                     <Button onClick={() => handleSaveDraft({
                                                         title: heldTitle,
@@ -359,6 +375,11 @@ function TextEditor() {
                                                     <Button onClick={switchToEditing} className='sm:w-24 bg-slate-400 rounded-xl m-1'>
                                                         Cancel
                                                     </Button>
+                                                    {!verified && (
+                                                        <span className='italic absolute text-xs sm:text-sm md:text-base bottom-30 mt-16'>
+                                                            Verify your account to post on Vent.
+                                                        </span>
+                                                    )}
                                                 </div>
                                             </div>
                                         </div>
