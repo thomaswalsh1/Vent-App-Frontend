@@ -71,6 +71,11 @@ function ProfileEditor() {
         private: false
     });
 
+    const [confirmBox, setConfirmBox] = useState(false);
+    const [emailSent, setEmailSent] = useState(false);
+    const [emailSending, setEmailSending] = useState(false);
+    const [errorEmail, setErrorEmail] = useState(false);
+
     /**
      * Fetch user data from DB and sync local state
      */
@@ -117,6 +122,9 @@ function ProfileEditor() {
                 }
             })
             // console.log(res.data.isConfirmed);
+            if(res.data.isConfirmed === false) {
+                setConfirmBox(true);
+            }
             setVerified(res.data.isConfirmed)
         } catch (error) {
             console.error(error);
@@ -243,10 +251,7 @@ function ProfileEditor() {
         setShowAdditionalSettings(true);
     }
 
-    const [confirmBox, setConfirmBox] = useState(true);
-    const [emailSent, setEmailSent] = useState(false);
-    const [emailSending, setEmailSending] = useState(false);
-    const [errorEmail, setErrorEmail] = useState(false);
+    
     const sendNewEmail = async () => {
         setEmailSending(true);
         try {
