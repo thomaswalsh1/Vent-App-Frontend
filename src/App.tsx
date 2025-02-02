@@ -15,6 +15,7 @@ import NewSign from './pages/NewSign';
 import { RootState } from '@/state/store';
 import Confirmation from './pages/Confirmation';
 import { SidebarProvider } from './context/SidebarContext';
+import AboutPage from './pages/AboutPage';
 
 
 function App() {
@@ -27,6 +28,7 @@ function App() {
           {/* Public Routes */}
           <Route path="/" element={isAuth ? <Navigate to="/home" /> : <NewSign />} />
           <Route path="/verify-email" element={<Confirmation />} />
+          <Route path='/about' element={<AboutPage />}/>
 
           {/* Protected Routes */}
           {isAuth && (

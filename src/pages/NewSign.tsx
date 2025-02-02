@@ -28,6 +28,10 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { RootState } from '@/state/store'
 import LoadingAnimation from '@/components/Animation/LoadingAnimation'
+import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { ToastAction } from '@/components/ui/toast'
+import MoreInfo from '@/components/about/MoreInfo'
+
 
 
 const signUpSchema = z.object({
@@ -60,10 +64,30 @@ export default function NewSign() {
     const [currentForm, setCurrentForm] = useState(0);
     const [direction, setDirection] = useState(0);
     const myForms = ["Email", "Name", "Password"];
+    const isDesktop = useMediaQuery("(min-width: 758px)")
+
 
     useEffect(() => {
         setTimeout(() => setIsLoading(false), 200);
     }, [])
+
+
+    const checkMobileScreen = async () => {
+        await new Promise((res) => setTimeout(res, 200))
+        if (!isDesktop) {
+            toast({
+                title: "Mobile screen detected",
+                description: "We highly recommend using the Vent app on mobile devices.",
+                action: <ToastAction altText="AppStore">Go to app store</ToastAction>
+            })
+        }
+    }
+
+    useEffect(() => {
+        // checkMobileScreen();
+    }, [])
+
+
 
 
     async function handleSubmitSignUp(values: z.infer<typeof signUpSchema>) {
@@ -199,6 +223,26 @@ export default function NewSign() {
                 setDirection(1)
                 setTimeout(() => {
                     setCurrentForm(currentForm + 1)
+
+                    setTimeout(() => {
+                        if (currentForm === 0) { // from email
+                            const firstNameInput = document.querySelector('input[name="firstName"]');
+                            if (firstNameInput instanceof HTMLElement) {
+                                firstNameInput.focus();
+                            }
+                        }
+
+                        if (currentForm === 1) { // from names
+                            const passwordInput = document.querySelector('input[name="password"]');
+                            if (passwordInput instanceof HTMLElement) {
+                                passwordInput.focus();
+                            }
+                        }
+
+                        if (currentForm === 2) { // from password
+                            handleSubmitSignUp
+                        }
+                    }, 101) // add just enough for input to be on dom
                 }, 0)
             }
         }
@@ -256,13 +300,22 @@ export default function NewSign() {
                 )
             case "Name":
                 return (
-                    <div className="w-full space-y-0 sm:space-y-4">
-                        <div className="space-y-1 sm:space-y-2">
+                    <div className="w-[80%] space-y-0 sm:space-y-4">
+                        <div className="w-full space-y-1 sm:space-y-2">
                             <Label className='text-xs sm:text-[1rem]'>First Name</Label>
                             <Input
                                 style={{ fontSize: "1rem" }}
                                 placeholder="Enter your first name"
                                 {...register("firstName")}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        const lastNameInput = document.querySelector('input[name="lastName"]');
+                                        if (lastNameInput instanceof HTMLElement) {
+                                            lastNameInput.focus();
+                                        }
+                                    }
+                                }}
                             />
                             {errors.firstName && (
                                 <p className="text-xs sm:text-sm text-red-500">{errors.firstName.message}</p>
@@ -274,6 +327,15 @@ export default function NewSign() {
                                 style={{ fontSize: "1rem" }}
                                 placeholder="Enter your last name"
                                 {...register("lastName")}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        const lastNameInput = document.querySelector('input[name="username"]');
+                                        if (lastNameInput instanceof HTMLElement) {
+                                            lastNameInput.focus();
+                                        }
+                                    }
+                                }}
                             />
                             {errors.lastName && (
                                 <p className="text-xs sm:text-sm text-red-500">{errors.lastName.message}</p>
@@ -285,6 +347,12 @@ export default function NewSign() {
                                 style={{ fontSize: "1rem" }}
                                 placeholder="Choose a username"
                                 {...register("username")}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault()
+                                        handleGoForward();
+                                    }
+                                }}
                             />
                             {errors.username && (
                                 <p className="text-xs sm:text-sm text-red-500">{errors.username.message}</p>
@@ -294,7 +362,7 @@ export default function NewSign() {
                 )
             case "Password":
                 return (
-                    <div className="w-full space-y-4">
+                    <div className="w-[80%] space-y-4">
                         <div className="space-y-2">
                             <Label className='text-sm sm:text-[1rem]'>Password</Label>
                             <Input
@@ -302,6 +370,15 @@ export default function NewSign() {
                                 type="password"
                                 placeholder="Enter your password"
                                 {...register("password")}
+                                onKeyDown={(e) => {
+                                    if (e.key === "Enter") {
+                                        e.preventDefault();
+                                        const lastNameInput = document.querySelector('input[name="confirm"]');
+                                        if (lastNameInput instanceof HTMLElement) {
+                                            lastNameInput.focus();
+                                        }
+                                    }
+                                }}
                             />
                             {errors.password && (
                                 <p className="text-sm text-red-500">{errors.password.message}</p>
@@ -325,7 +402,6 @@ export default function NewSign() {
                 return null
         }
     }
-
 
     return (
 
@@ -355,8 +431,11 @@ export default function NewSign() {
                             initial={{ opacity: "-100%" }}
                             animate={{ opacity: "100%" }}
                         >
-                            <span className='text-white italic text-sm sm:text-2xl' >By Thomas Walsh</span>
+                            <span className='text-white italic text-sm sm:text-xl' >By Thomas Walsh</span>
                         </motion.div>
+                        <div className='hidden sm:flex -mb-10'>
+                            <MoreInfo />
+                        </div>
                         <div id="downloadAppsDesktop" className='mt-4 sm:mt-0 flex flex-row justify-center sm:w-full gap-x-2 '>
                             <div className='hidden sm:flex w-28 sm:w-48 sm:h-48'>
                                 <img className='object-cover' src={AppStore} />
@@ -371,9 +450,13 @@ export default function NewSign() {
                                 <IoLogoGooglePlaystore className='w-8 h-8' />
                             </div>
                         </div>
+                        
                     </>
                 )}
 
+            </div>
+            <div className='sm:hidden relative top-6 z-20 flex'>
+                <MoreInfo />
             </div>
             <div id="enter half" className='w-[100%] sm:w-[50%] h-[70%] sm:h-full flex items-center justify-center bg-white z-10'>
                 <div className='w-[90%] h-full my-2 flex flex-col justify-center p-3 items-center bg-white rounded-lg overflow-hidden'>
@@ -387,7 +470,8 @@ export default function NewSign() {
                     <div className="w-full h-[40%] sm:h-[50%] md:h-[50%] my-8 sm:my-0 flex items-center justify-center">
                         <AnimatePresence mode="wait">
                             {!signInMode ? (
-                                <motion.div>
+                                <motion.div
+                                    className='w-full'>
                                     <AnimatePresence mode="wait">
                                         <motion.div
                                             key={currentForm}
@@ -419,6 +503,15 @@ export default function NewSign() {
                                                 type="email"
                                                 placeholder="Enter your Email"
                                                 {...register2("email")}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        e.preventDefault();
+                                                        const passwordInput = document.querySelector('input[name="password"]');
+                                                        if (passwordInput instanceof HTMLElement) {
+                                                            passwordInput.focus();
+                                                        }
+                                                    }
+                                                }}
                                             />
                                             {errors2.email && (
                                                 <p className="text-sm text-red-500">{errors2.email.message}</p>
@@ -431,6 +524,11 @@ export default function NewSign() {
                                                 type="password"
                                                 placeholder="Enter your password"
                                                 {...register2("password")}
+                                                onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                        e.preventDefault();
+                                                    }
+                                                }}
                                             />
                                             {errors2.password && (
                                                 <p className="text-sm text-red-500">{errors2.password.message}</p>
