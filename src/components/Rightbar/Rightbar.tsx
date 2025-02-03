@@ -16,7 +16,7 @@ import { Separator } from "../ui/separator";
 import { apiClient } from "@/lib/api-client";
 import { USER_ROUTES } from "@/utils/constants";
 import { RootState } from "@/state/store";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { FaChevronLeft } from "react-icons/fa";
 import { MdArrowBack } from "react-icons/md";
 import { Skeleton } from '../ui/skeleton';
@@ -125,7 +125,7 @@ function Rightbar({ close, mode, id }: { close: () => void, mode: string, id: st
             <div className='w-8 h-8' ></div>
           </div>
           <Separator className='mb-4' />
-          <div className='h-full flex flex-col justify-start overflow-scroll gap-y-2'>
+          <div className='h-full flex overflow-x-hidden no-scrollbar flex-col justify-start overflow-scroll gap-y-2'>
             {loading && currentPage === 1 && (
               <div className='flex h-full items-center justify-center'>
                 <LoadingAnimation />
@@ -133,7 +133,7 @@ function Rightbar({ close, mode, id }: { close: () => void, mode: string, id: st
 
             )}
             {visibleUsers.map((user, index) => (
-              <RightbarUserCard userId={user} key={index} />
+              <RightbarUserCard closer={closeAndClear} userId={user} key={index} />
             ))}
             {visibleUsers.length === 0 && !loading && (
               <div className='h-full flex items-center justify-center'>

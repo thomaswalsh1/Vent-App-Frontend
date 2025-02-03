@@ -9,18 +9,14 @@ import { useNavigate } from 'react-router-dom';
 
 interface User {
     pfp: string;
-    firstName: string;
-    lastName: string;
     username: string;
 }
 
-function RightbarUserCard({ userId }: { userId: string }) {
+function RightbarUserCard({ userId, closer }: { userId: string, closer: () => void }) {
 
     const currToken = useSelector((state: RootState) => state.auth.token)
     const [user, setUser] = useState<User>({
         pfp: "",
-        firstName: "",
-        lastName: "",
         username: ""
     })
     const [loading, setLoading] = useState(false);
@@ -44,17 +40,21 @@ function RightbarUserCard({ userId }: { userId: string }) {
         }
     }
 
+    const goToUserPage = () => {
+        closer();
+        navigate(`/users/${userId}`)
+    }
+
     useEffect(() => {
         fetchUserData();
     }, [])
 
     return (<>
         {!loading ? (
-            <div className='w-full h-fit border-2 justify-between items-center rounded-xl bg-white flex flex-row p-4' onClick={() => navigate(`/users/${userId}`)}>
+            <div className='w-full h-fit border-2 justify-between items-center rounded-xl bg-white flex flex-row p-4' onClick={goToUserPage}>
                 <img className="w-10 h-10 object-fit rounded-full border-2" src={user.pfp || emptypfp} />
                 <div className='flex gap-x-4'>
                     <span className='text-sm sm:text-base font-bold'>{user.username}</span>
-                    <span className='text-sm sm:text-base'>{`${user.firstName} ${user.lastName}`}</span>
                 </div>
             </div>
         ) : ( 

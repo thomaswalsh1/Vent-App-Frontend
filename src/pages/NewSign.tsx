@@ -28,7 +28,7 @@ import { MdNavigateNext, MdNavigateBefore } from "react-icons/md";
 import { FormControl, FormDescription, FormField, FormItem, FormLabel } from '@/components/ui/form'
 import { RootState } from '@/state/store'
 import LoadingAnimation from '@/components/Animation/LoadingAnimation'
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import useMediaQuery from '@mui/material/useMediaQuery'
 import { ToastAction } from '@/components/ui/toast'
 import MoreInfo from '@/components/about/MoreInfo'
 import Support from '@/support/Support'
@@ -65,7 +65,9 @@ export default function NewSign() {
     const [currentForm, setCurrentForm] = useState(0);
     const [direction, setDirection] = useState(0);
     const myForms = ["Email", "Name", "Password"];
-    const isDesktop = useMediaQuery("(min-width: 758px)")
+    const isDesktop = useMediaQuery("(min-width: 768px)", {noSsr: true})
+    console.log(isDesktop);
+    const [initialized, setInitialized] = useState(false);
 
 
     useEffect(() => {
@@ -74,7 +76,7 @@ export default function NewSign() {
 
 
     const checkMobileScreen = async () => {
-        await new Promise((res) => setTimeout(res, 200))
+        await new Promise((res) => setTimeout(res, 1000))
         if (!isDesktop) {
             toast({
                 title: "Mobile screen detected",
@@ -85,11 +87,8 @@ export default function NewSign() {
     }
 
     useEffect(() => {
-        // checkMobileScreen();
-    }, [])
-
-
-
+        checkMobileScreen();
+    }, [isDesktop])
 
     async function handleSubmitSignUp(values: z.infer<typeof signUpSchema>) {
         setSignInLoading(true);
@@ -451,7 +450,7 @@ export default function NewSign() {
                                 <IoLogoGooglePlaystore className='w-8 h-8' />
                             </div>
                         </div>
-                        
+
                     </>
                 )}
 
@@ -462,7 +461,7 @@ export default function NewSign() {
             <div id="enter half" className='w-[100%] sm:w-[50%] h-[70%] sm:h-full flex items-center justify-center bg-white z-10'>
                 <div className='w-[90%] h-full my-2 flex flex-col justify-center p-3 items-center bg-white rounded-lg overflow-hidden'>
                     <div className='absolute w-fit h-fit top-1 right-1'>
-                        <Support/>
+                        <Support />
                     </div>
                     <div id="getStarted" className='text-4xl'>
                         <span className='brand-text'>{!signInMode ? "Get Started" : "Sign In"}</span>

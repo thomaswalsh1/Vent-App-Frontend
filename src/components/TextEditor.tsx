@@ -25,6 +25,7 @@ import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, For
 import TagInput from './InputtingTags/TagInput';
 import { Separator } from "@/components/ui/separator"
 import { HoverCard, HoverCardTrigger, HoverCardContent } from './ui/hover-card';
+import { IoIosCheckmarkCircleOutline } from "react-icons/io";
 import LoadingAnimation from './Animation/LoadingAnimation';
 
 
@@ -360,12 +361,23 @@ function TextEditor() {
                                                     </form>
                                                 </Form>
                                                 <div id="buttons" className='flex flex-row items-center justify-center'>
-                                                    <Button disabled={!verified} onClick={() => handlePost({
-                                                        title: heldTitle,
-                                                        content: heldContent
-                                                    })} className='sm:w-24 bg-slate-600 rounded-xl m-1'>
-                                                        Post    
-                                                    </Button>
+                                                    <HoverCard>
+                                                        <HoverCardTrigger>
+                                                            <Button onClick={verified ? () => handlePost({
+                                                                title: heldTitle,
+                                                                content: heldContent
+                                                            }) : null} className={` ${verified ? "cursor-pointer" : "cursor-not-allowed"} sm:w-24 bg-slate-600 rounded-xl m-1`}>
+                                                                Post
+                                                            </Button>
+                                                        </HoverCardTrigger>
+                                                        <HoverCardContent className={`${verified ? "hidden" : ""} p-2`}>
+                                                            <span className='text-xs sm:text-sm'>
+                                                                You must be verified to post on vent.
+                                                            </span>
+
+                                                        </HoverCardContent>
+                                                    </HoverCard>
+
                                                     <Button onClick={() => handleSaveDraft({
                                                         title: heldTitle,
                                                         content: heldContent
@@ -375,11 +387,7 @@ function TextEditor() {
                                                     <Button onClick={switchToEditing} className='sm:w-24 bg-slate-400 rounded-xl m-1'>
                                                         Cancel
                                                     </Button>
-                                                    {!verified && (
-                                                        <span className='italic absolute text-xs sm:text-sm md:text-base bottom-30 mt-16'>
-                                                            Verify your account to post on Vent.
-                                                        </span>
-                                                    )}
+
                                                 </div>
                                             </div>
                                         </div>

@@ -15,7 +15,7 @@ import { Separator } from "./ui/separator";
 import { apiClient } from "@/lib/api-client";
 import { CHECK_CONFIRM_ROUTE, USER_ROUTES } from "@/utils/constants";
 import { RootState } from "@/state/store";
-import { useMediaQuery } from "@/hooks/useMediaQuery";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export function MySideBar({ close }: { close: () => void }) {
   const [openSignOut, setOpenSignOut] = useState(false);
