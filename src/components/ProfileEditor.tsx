@@ -256,7 +256,11 @@ function ProfileEditor() {
         setEmailSending(true);
         try {
             // await new Promise((res) => setTimeout(res, 2000)); // test loading
-            await apiClient.post(SEND_CONFIRM_ROUTE, {});
+            await apiClient.post(SEND_CONFIRM_ROUTE, {}, {
+                headers: {
+                    Authorization: `Bearer ${currToken}`
+                }
+            });
             setEmailSent(true);
         } catch (error) {
             console.log(error);
