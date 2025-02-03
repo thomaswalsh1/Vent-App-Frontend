@@ -65,10 +65,12 @@ export default function NewSign() {
     const [currentForm, setCurrentForm] = useState(0);
     const [direction, setDirection] = useState(0);
     const myForms = ["Email", "Name", "Password"];
-    const isDesktop = useMediaQuery("(min-width: 768px)", {noSsr: true})
-    console.log(isDesktop);
-    const [initialized, setInitialized] = useState(false);
-
+    const isDesktop = useMediaQuery("(min-width: 768px)", { noSsr: true })
+    const TIMEOUT_1 = 8000;
+    const TIMEOUT_2 = 20000;
+    const TIMEOUT_1_MESSAGE = "This is taking longer than usual. Please wait..."
+    const TIMEOUT_2_MESSAGE = "I'm sure my backed would be better if you donated."
+    const [messageState, setMessageState] = useState("");
 
     useEffect(() => {
         setTimeout(() => setIsLoading(false), 200);
@@ -90,8 +92,27 @@ export default function NewSign() {
         checkMobileScreen();
     }, [isDesktop])
 
+    // loading message handler
+
+    const setupTimers = () => {
+        const initialTimer = setTimeout(() => {
+            setMessageState(TIMEOUT_1_MESSAGE);
+        }, TIMEOUT_1);
+
+        const extendedTimer = setTimeout(() => {
+            setMessageState(TIMEOUT_2_MESSAGE);
+        }, TIMEOUT_2);
+
+        return () => {
+            clearTimeout(initialTimer);
+            clearTimeout(extendedTimer);
+        };
+    }
+
     async function handleSubmitSignUp(values: z.infer<typeof signUpSchema>) {
         setSignInLoading(true);
+        setupTimers();
+        await new Promise((res) => setTimeout(res, 15000)); // test loading
         try {
 
             const { firstName, lastName, email, username, password } = values;
@@ -146,6 +167,8 @@ export default function NewSign() {
 
     async function handleSubmitSignIn(values: z.infer<typeof signInSchema>) {
         setSignInLoading(true);
+        setupTimers();
+        await new Promise((res) => setTimeout(res, 15000));
         try {
 
             // await new Promise((resolve) => setTimeout(resolve, 5000)) // for testing the loading screen
@@ -408,8 +431,11 @@ export default function NewSign() {
         <div className='w-screen h-screen flex flex-col sm:flex-row items-center justify-center overflow-hidden bg-slate-500'>
             {signInLoading && (
                 <div className="fixed top-0 left-0 w-screen h-screen flex items-center justify-center bg-black bg-opacity-50 z-50">
-                    <div className="bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex items-center justify-center border-2 rounded-xl">
+                    <div className="bg-white w-[90%] h-[20%] sm:w-[20%] sm:h-[20%] flex flex-col gap-y-3 items-center justify-center border-2 rounded-xl">
                         <LoadingAnimation />
+                        <span className='italic text-slate-500 text-sm sm:text-base'>
+                            {messageState}
+                        </span>
                     </div>
                 </div>
             )}
